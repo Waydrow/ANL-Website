@@ -104,7 +104,8 @@ router.get('/profile', function(req, res, next) {
 // Upload the avatar
 router.post('/avatar', uploadAvatar, function(req, res, next) {
     "use strict";
-    var newPath = req.file.path.substr(6);
+    var indexPath = req.file.path.indexOf('/images/');
+    var newPath = req.file.path.slice(indexPath);
     User.update({ _id: req.payload.id }, { $set: { photo: newPath } }, function(err) {
         if (err) {
             console.error("Error occurred when updating user photo.");
@@ -715,7 +716,9 @@ router.post('/image', uploadImage.array("images"), function(req, res, next) {
     "use strict";
     var imagesPath = [];
     async.each(req.files, function(image, cb) {
-        imagesPath.push(image.path.substr(6));
+        var indexFile = image.path.indexOf('images/');
+        var tmpPath = image.path.slice(indexFile);
+        imagesPath.push(tmpPath);
         cb();
     }, function(err) {
         if (err) {
@@ -731,8 +734,12 @@ router.post('/image', uploadImage.array("images"), function(req, res, next) {
 router.post('/carousel_image', authAdmin, uploadImage.array("images"), function(req, res, next) {
     "use strict";
     async.each(req.files, function(file, cb) {
+        var indexFile = file.path.indexOf('images/');
+        var tmpPath = file.path.slice(indexFile);
         var image = new Image({
-            path: file.path.substr(6),
+
+            // path: file.path.substr(6),
+            path: tmpPath,
             date: Date.now()
         });
         image.save(function(err) {
@@ -780,7 +787,13 @@ router.delete('/carousel_image', authAdmin, function(req, res, next) {
             return res.sendStatus(404);
         } else {
             res.sendStatus(200);
-            fs.unlink("./public" + image.path, function(err) {
+            var tmpPath = path.join(ROOT_PATH, 'public', image.path);
+            /*fs.unlink("./public" + image.path, function(err) {
+                if (err) {
+                    console.error("Failed to unlink the corresponding file.");
+                }
+            });*/
+            fs.unlink(tmpPath, function(err) {
                 if (err) {
                     console.error("Failed to unlink the corresponding file.");
                 }

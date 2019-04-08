@@ -23,6 +23,7 @@ var email = {
     user: 'anl_sjtu@163.com',
     pass: 'anle309',
     anlEmail: 'anl-cs-sjtu@googlegroups.com'
+    // anlEmail: 'waydrow@sjtu.edu.cn'
 };
 
 var auth = expressJwt({
