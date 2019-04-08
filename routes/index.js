@@ -26,6 +26,9 @@ var Document = require("../models/document");
 var File = require("../models/file");
 var Group = require('../models/group');
 
+const path = require('path');
+const FILE_PATH = path.join(__dirname, '..');
+
 // Print error info and write response
 function unknownError(err, next) {
     console.error(err);
@@ -290,7 +293,8 @@ router.get("/download", function (req, res, next) {
                 console.error("File not found.");
                 return next("File not found.");
             } else {
-                return res.download(file.path, file.name);
+                var tmppath = path.join(FILE_PATH, file.path);
+                return res.download(tmppath, file.name);
             }
         });
     }
@@ -593,7 +597,8 @@ router.get("/file", function (req, res, next) {
                 console.error(err);
                 return next();
             } else {
-                return res.download(file.path, file.name);
+                var tmppath = path.join(FILE_PATH, file.path);
+                return res.download(tmppath, file.name);
             }
         });
     }

@@ -33,9 +33,13 @@ var File = require("../models/file");
 var Image = require("../models/image");
 var Document = require("../models/document");
 
+const path = require('path');
+const ROOT_PATH = path.join(__dirname, '..');
+
 // Multer configuration
 var avatarDiskStorage = multer.diskStorage({
-    destination: "./public/images/avatars/",
+    // destination: "./public/images/avatars/",
+    destination: path.join(ROOT_PATH, 'public/images/avatars'),
     filename: function(req, file, cb) {
         cb(null, req.payload.id);
     }
@@ -43,17 +47,20 @@ var avatarDiskStorage = multer.diskStorage({
 var uploadAvatar = multer({ storage: avatarDiskStorage }).single("avatar");
 
 var fileDiskStorage = multer.diskStorage({
-    destination: "./files/private",
+    // destination: "./files/private",
+    destination: path.join(ROOT_PATH, 'files/private'),
     filename: function(req, file, cb) {
         cb(null, file.originalname + "_" + Date.now());
     }
 });
 var uploadFile = multer({ storage: fileDiskStorage });
 
-var uploadImage = multer({ dest: "./public/images/" });
+// var uploadImage = multer({ dest: "./public/images/" });
+var uploadImage = multer({ dest: path.join(ROOT_PATH, 'public/images') });
 
 var storageForDocuments = multer.diskStorage({
-    destination: './files/public/',
+    // destination: './files/public/',
+    destination: path.join(ROOT_PATH, 'files/public'),
     filename: function(req, file, cb) {
         cb(null, file.originalname + "_" + Date.now());
     }
@@ -570,10 +577,12 @@ router.post('/blog', uploadFile.array("attachments"), function(req, res, next) {
         });
         var attachLists = [];
         async.each(req.files, function(file, cb) {
+            var indexFile = file.path.indexOf('files/');
+            var tmpPath = file.path.slice(indexFile);
             var fileObj = File({
                 name: file.originalname,
                 size: file.size,
-                path: file.path,
+                path: tmpPath,
                 date: Date.now(),
                 publisher: req.payload.id
             });
@@ -611,10 +620,12 @@ router.post('/blog', uploadFile.array("attachments"), function(req, res, next) {
     } else {
         var attachLists = []
         async.each(req.files, function(file, cb) {
+            var indexFile = file.path.indexOf('files/');
+            var tmpPath = file.path.slice(indexFile);
             var fileObj = File({
                 name: file.originalname,
                 size: file.size,
-                path: file.path,
+                path: tmpPath,
                 date: Date.now(),
                 publisher: req.payload.id
             });
@@ -627,7 +638,7 @@ router.post('/blog', uploadFile.array("attachments"), function(req, res, next) {
                     cb(err);
                 } else {
                     req.body.blog.attachments.push(fileObj);
-                    attachLists.push({ filename: file.originalname, path: file.path });
+                    attachLists.push({ filename: file.originalname, path: tmpPath });
                     cb();
                 }
             });
@@ -869,7 +880,8 @@ router.get("/file", function(req, res, next) {
                 console.error("File not found.");
                 return next({ status: 404 });
             } else {
-                res.download(file.path, file.name);
+                var tmppath = path.join(FILE_PATH, file.path);
+                res.download(tmppath.path, file.name);
             }
         });
     }
