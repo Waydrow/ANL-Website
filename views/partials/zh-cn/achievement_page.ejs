@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <h2 class="text-center"><%= achievement.title %></h2>
+            <div align="right">[ <%= moment(achievement.date).format("YYYY-MM-DD") %> ]</div>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <%- achievement.content %>
+            <div align="right" style="border-top: solid lightgray 0.5px; margin:10px 0 10px 0;">
+                <span>访问数量：<%= achievement.visit_count %></span>
+            </div>
+        </div>
+    </div>
+</div>

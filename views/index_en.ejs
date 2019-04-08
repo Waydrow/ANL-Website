@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html ng-app="anl">
+<head>
+    <title>Advanced Network Laboratory-Shanghai Jiao Tong University</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="/js/plugins.js"></script>
+    <script type="text/javascript" src="/js/jwt-decode.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+
+<body>
+<header role="banner" ng-controller="HeaderController as headerCtrl">
+    <div class="container">
+        <a class="banner-brand visible-lg visible-md" href="/en">
+            <img src="/img/logo.png" alt="Advanced Network Laboratory">
+        </a>
+        <div class="utility-nav">
+            <a href="" ng-click="headerCtrl.showLoginModal()" title="Login" ng-if="!headerCtrl.currentUser"><i
+                        class="fa fa-user-circle-o fa-lg" aria-hidden="true"></i><span> Login</span></a>
+            <a href="" data-toggle="dropdown" ng-if="headerCtrl.currentUser">
+                <i class="fa fa-user-o" aria-hidden="true"></i> <span ng-bind="headerCtrl.currentUser.username"></span>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li><a href="/dashboard" target="_blank">Dashboard</a></li>
+                <li><a href="" ng-click="headerCtrl.logout()">Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Login Window-->
+        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="loginLabel">Login</h4>
+                    </div>
+                    <form class="form-horizontal" ng-submit="headerCtrl.login()">
+                        <div class="modal-body">
+                            <div class="alert alert-danger alert-dismissible" role="alert" ng-if="headerCtrl.alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                                        ng-click="headerCtrl.closeAlert()"><span aria-hidden="true">&times;</span>
+                                </button>
+                                Invalid username or password!
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <div class="form-group">
+                                        <label class="sr-only" for="exampleInputAmount">Username</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-user-o"
+                                                                              aria-hidden="true"></i>
+                                            </div>
+                                            <input type="text" class="form-control" id="username" placeholder="Username"
+                                                   ng-model="headerCtrl.user.username" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="exampleInputAmount">Password</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i>
+                                            </div>
+                                            <input type="password" class="form-control" id="password"
+                                                   placeholder="Password"
+                                                   ng-model="headerCtrl.user.password" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button class="btn btn-primary" type="submit">Login</button>
+                        </div>
+                    </form>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand visible-sm visible-xs" ui-sref="home">
+                    <img src="/img/logo.png" alt="Advanced Network Laboratory" height="50">
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="nav navbar-nav">
+                    <li ng-class="{active: <%= name == 'home'; %>}"><a href="/en"><span class="icon fa fa-home"></span>
+                            Home</a>
+                    </li>
+                    <li ng-class="{active: <%= name == 'introduction'; %>}"><a href="/en/introduction"><span
+                                    class="icon fa fa-info-circle"></span> Introduction</a></li>
+                    <li ng-class="{active: <%= name == 'member'; %>}"><a href="/en/member"><span
+                                    class="icon fa fa-group"></span> Members</a></li>
+                    <li ng-class="{active: <%= name == 'news'; %>}"><a href="/en/news"><span
+                                    class="icon fa fa-bullhorn"></span> News</a></li>
+                    <li ng-class="{active: <%= name == 'achievement'; %>}"><a href="/en/achievement"><span
+                                    class="icon fa fa-heart"></span> Achievements</a></li>
+                    <li ng-class="{active: <%= name == 'activity'; %>}"><a href="/en/activity"><span
+                                    class="icon fa fa-flag"></span> Activities</a></li>
+                    <li ng-class="{active: <%= name == 'download'; %>}"><a href="/en/download"><span
+                                    class="icon fa fa-download"></span> Downloads</a></li>
+                    <li><a href="/"><span class="icon fa fa-language"></span> Chinese</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container -->
+    </nav>
+</header>
+
+<div class="container">
+    <%- include('partials/en/' + name); %>
+</div>
+
+<footer role="contentinfo">
+    <div class="row">
+        <div class="col-md-12">
+            <p>&copy; Copyright 2012 - 2016 Shanghai Jiao Tong University Advanced Network Laboratory</p>
+            <address>SEIEE Building 3-East 309, 800 Dongchuan Rd, Minhang, Shanghai, China, 200240</address>
+            <p>Website Information: <a href="mailto:tianshilei@sjtu.edu.cn">
+                    tianshilei@sjtu.edu.cn</a></p>
+        </div>
+    </div>
+    <div class="row text-center">
+        <img src="/img/qrcode.png" style="width: 80px;">
+        <h5>
+            <small>Scan the QR code to follow the official account of ANL on Wechat.</small>
+        </h5>
+    </div>
+</footer>
+
+<script type="text/javascript" src="/js/index-controllers.js"></script>
+</body>
+</html>

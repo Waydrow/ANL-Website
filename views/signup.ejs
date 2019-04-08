@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html ng-app="anl_signup">
+<head>
+    <title>注册-上海交通大学先进网络实验室</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="/js/plugins.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+</head>
+
+<body>
+<header class="container">
+    <a href="/" target="_blank">
+        <img class="img-responsive center-block" src="/img/logo.png">
+    </a>
+</header>
+<div class="container" ng-controller="SignupController as signupCtrl">
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8 well">
+            <h4 class="text-center">注册须知</h4>
+            <p>欢迎来到上海交通大学先进网络实验室！</p>
+            <p>Welcome to Advanced Network Laboratory of Shanghai Jiao Tong University.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8">
+            <!-- Error Banner -->
+            <div class="col-sm-12 text-center" ng-if="signupCtrl.alert">
+                <div class="alert alert-{{signupCtrl.alert.type}} alert-dismissible" role="alert">
+                    <button type="button" class="close" ng-click="signupCtrl.closeAlert()" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <strong ng-bind="signupCtrl.alert.message"></strong>
+                </div>
+            </div>
+            <form ng-submit="signupCtrl.submit()">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">用户名/Username</label>
+                        <input class="form-control" ng-model="signupCtrl.newUser.username" required>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">邮箱/Email</label>
+                        <input type="email" class="form-control" ng-model="signupCtrl.newUser.email" required>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">密码/Password</label>
+                        <input type="password" class="form-control" ng-model="signupCtrl.newUser.password" required>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">密码确认/Confirm Password</label>
+                        <input type="password" class="form-control" ng-model="signupCtrl.newUser.confirmPassword"
+                               required>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">中文姓名/Chinese Name</label>
+                        <input class="form-control" ng-model="signupCtrl.newUser.name" required>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">英文姓名/English Name</label>
+                        <input class="form-control" ng-model="signupCtrl.newUser.name_en" required>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label">用户身份/Role</label><br>
+                        <div class="btn-group">
+                            <label class="btn btn-primary" ng-model="signupCtrl.newUser.role"
+                                   uib-btn-radio="0">本科生/Undergraduate</label>
+                            <label class="btn btn-primary" ng-model="signupCtrl.newUser.role"
+                                   uib-btn-radio="1">硕士/Master</label>
+                            <label class="btn btn-primary" ng-model="signupCtrl.newUser.role"
+                                   uib-btn-radio="2">博士/Ph.D</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-success">注册/Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/js/ui-bootstrap-tpls.min.js"></script>
+<script type="text/javascript" src="/js/signup-controller.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-8">
+        <% achievements.forEach(function(achievement) { %>
+        <div class="row news-list">
+            <h4><a href="/achievement?id=<%= achievement._id %>" target="_blank"><%= achievement.title %></a></h4>
+            <div>
+                <span style="float: left;"><%= moment(achievement.date).format("YYYY-MM-DD HH:mm") %></span>
+                <span style="float: right;"><%= achievement.visit_count %> 次阅读</span>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+</div>

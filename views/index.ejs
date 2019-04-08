@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html ng-app="anl">
+<head>
+    <title>上海交通大学先进网络实验室</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="/js/plugins.js"></script>
+    <script type="text/javascript" src="/js/jwt-decode.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+
+<body>
+<header role="banner" ng-controller="HeaderController as headerCtrl">
+    <div class="container">
+        <a class="banner-brand visible-lg visible-md" href="/">
+            <img src="/img/logo.png" alt="上海交通大学先进网络实验室">
+        </a>
+        <div class="utility-nav">
+            <a href="" ng-click="headerCtrl.showLoginModal()" title="登录" ng-if="!headerCtrl.currentUser"><i
+                        class="fa fa-user-circle-o fa-lg" aria-hidden="true"></i><span> 登录</span></a>
+            <a href="" data-toggle="dropdown" ng-if="headerCtrl.currentUser">
+                <i class="fa fa-user-o" aria-hidden="true"></i> <span ng-bind="headerCtrl.currentUser.username"></span>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li><a href="/dashboard" target="_blank">后台管理</a></li>
+                <li><a href="" ng-click="headerCtrl.logout()">注销</a></li>
+            </ul>
+        </div>
+
+        <!--用户登录窗口-->
+        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="loginLabel">登录</h4>
+                    </div>
+                    <form class="form-horizontal" ng-submit="headerCtrl.login()">
+                        <div class="modal-body">
+                            <div class="alert alert-danger alert-dismissible" role="alert" ng-if="headerCtrl.alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                                        ng-click="headerCtrl.closeAlert()"><span aria-hidden="true">&times;</span>
+                                </button>
+                                用户名或密码错误!
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <div class="form-group">
+                                        <label class="sr-only" for="exampleInputAmount">用户名</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-user-o"
+                                                                              aria-hidden="true"></i>
+                                            </div>
+                                            <input type="text" class="form-control" id="username" placeholder="用户名"
+                                                   ng-model="headerCtrl.user.username" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="exampleInputAmount">密码</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i>
+                                            </div>
+                                            <input type="password" class="form-control" id="password" placeholder="密码"
+                                                   ng-model="headerCtrl.user.password" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button class="btn btn-primary" type="submit">登录</button>
+                        </div>
+                    </form>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand visible-sm visible-xs" ui-sref="home">
+                    <img src="/img/logo.png" alt="上海交通大学先进网络实验室" height="50">
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="nav navbar-nav">
+                    <li ng-class="{active: <%= name == 'home'; %>}"><a href="/"><span class="icon fa fa-home"></span> 首页</a>
+                    </li>
+                    <li ng-class="{active: <%= name == 'introduction'; %>}"><a href="introduction"><span
+                                    class="icon fa fa-info-circle"></span> 简介</a></li>
+                    <li ng-class="{active: <%= name == 'member'; %>}"><a href="member"><span
+                                    class="icon fa fa-group"></span> 成员</a></li>
+                    <li ng-class="{active: <%= name == 'news'; %>}"><a href="news"><span
+                                    class="icon fa fa-bullhorn"></span> 新闻动态</a></li>
+                    <li ng-class="{active: <%= name == 'achievement'; %>}"><a href="achievement"><span
+                                    class="icon fa fa-heart"></span> 成果展示</a></li>
+                    <li ng-class="{active: <%= name == 'activity'; %>}"><a href="activity"><span
+                                    class="icon fa fa-flag"></span> 科研活动</a></li>
+                    <li ng-class="{active: <%= name == 'download'; %>}"><a href="download"><span
+                                    class="icon fa fa-download"></span> 资料下载</a></li>
+                    <li><a href="en"><span class="icon fa fa-language"></span> English</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container -->
+    </nav>
+</header>
+
+<div class="container">
+    <%- include('partials/zh-cn/' + name); %>
+</div>
+
+<footer role="contentinfo">
+    <div class="row">
+        <div class="col-md-12">
+            <p>&copy; 版权所有 2012-2017 上海交通大学先进网络实验室</p>
+            <address>上海市闵行区东川路 800 号上海交通大学<br>电子信息与电气工程学院 3 号楼东 309 室, 200240</address>
+            <p>网站信息: <a href="mailto:tianshilei@sjtu.edu.cn">
+                    tianshilei@sjtu.edu.cn</a></p>
+        </div>
+    </div>
+    <div class="row text-center">
+        <img src="/img/qrcode.png" style="width: 80px;">
+        <h5>
+            <small>扫描二维码关注上海交通大学先进网络实验室微信公众号</small>
+        </h5>
+    </div>
+</footer>
+
+<script type="text/javascript" src="/js/index-controllers.js"></script>
+</body>
+</html>

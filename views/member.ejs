@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title><%= user.name_en %> - ANL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="/js/plugins.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+</head>
+
+<body>
+<header class="container">
+    <a href="/" target="_blank">
+        <img class="img-responsive center-block" src="/img/logo.png">
+    </a>
+</header>
+<hr>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="row">
+                <div class="col-sm-12">
+                    <img class="img-rounded img-responsive center-block" src="<%= user.photo %>"
+                         style="max-height: 200px;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h4><%= user.name_en %></h4>
+                    <% if (user.supervisor) { %>
+                    <p>Supervised by <b><%= user.supervisor.name_en %></b></p>
+                    <% } %>
+                    <p><b>Email: </b><%= user.email %></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Introduction</h3>
+                    <p><%= user.introduction ? user.introduction : "" %></p>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Research Interest</h3>
+                    <p><%= user.interests ? user.interests : "" %></p>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Education Background</h3>
+                    <ul>
+                        <% user.educations.forEach(function (education) { %>
+                        <li>
+                            <%= moment(education.start).format("MMM. YYYY") %>
+                            - <%= education.end ? moment(education.end).format("MMM. YYYY") : 'Present' %>:
+                            <% if (education.type == 0) { %>
+                            <span>Bachelor</span>
+                            <% } else if (education.type == 1) { %>
+                            <span>Master</span>
+                            <% } else if (education.type == 2) { %>
+                            <span>Ph.D</span>
+                            <% } %>
+                            in <%= education.major %>, <%= education.school %>
+                        </li>
+                        <% }); %>
+                    </ul>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Publications</h3>
+                    <ul>
+                        <% user.publications.forEach(function (publication) { %>
+                        <li>
+                            <%= publication.authors %>, <%= publication.title %>, <%= publication.name %>
+                            , <%= moment(publication.date).format("MMM MM, YYYY") %>
+                        </li>
+                        <% }); %>
+                    </ul>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app="dashboard">
+<head>
+    <title>后台管理 - ANL</title>
+    <script type="text/javascript" src="/js/plugins.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel='stylesheet' href='/css/textAngular.css'>
+    <link rel='stylesheet' href='/css/font-awesome.min.css'/>
+    <link rel="stylesheet" href="/css/dashboard.css"/>
+    <script src="/js/jwt-decode.min.js"></script>
+</head>
+<body ng-controller="MainController as mainCtrl">
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">ANL 后台管理</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div ng-if="mainCtrl.currentUser">
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="nav navbar-nav">
+                    <li ng-class="mainCtrl.getStatus('profile')"><a ui-sref="profile">个人信息</a></li>
+                    <li ng-class="mainCtrl.getStatus('member')" ng-if="mainCtrl.currentUser.admin"><a
+                                ui-sref="member">成员管理</a></li>
+                    <li ng-class="mainCtrl.getStatus('news')" ng-if="mainCtrl.currentUser.admin"><a
+                                ui-sref="news">新闻管理</a></li>
+                    <li ng-class="mainCtrl.getStatus('achievement')" ng-if="mainCtrl.currentUser.admin">
+                        <a ui-sref="achievement">研究成果</a></li>
+                    <li ng-class="mainCtrl.getStatus('activity')"><a ui-sref="activity">科研活动</a></li>
+                    <li ng-class="mainCtrl.getStatus('files')" ng-if="mainCtrl.currentUser.admin"><a
+                                ui-sref="files">文件管理</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/" target="_blank">ANL 主页</a></li>
+                    <li><a href="" ng-click="mainCtrl.logout()" ng-if="mainCtrl.currentUser">注销 <span
+                                    class="fa fa-sign-out fa-lg"></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div ui-view></div>
+</div>
+
+<script type="text/javascript" src="/js/dashboard-plugins.js"></script>
+<script type="text/javascript" src="/js/dashboard-controller.js"></script>
+</body>
+</html>

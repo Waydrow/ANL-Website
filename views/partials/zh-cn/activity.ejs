@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-sm-2 member-sidebar">
+        <ul class="nav nav-list">
+            <li class="nav-header">分组过滤</li>
+            <li><a href="/activity">无</a></li>
+            <% groups.forEach(function (group) { %>
+            <li><a href="/activity?gid=<%= group._id %>"><%= group.name %></a></li>
+            <% }) %>
+        </ul>
+    </div>
+    <div class="col-sm-10">
+        <% blogs.forEach(function(blog) { %>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="news-list">
+                    <h4><a href="/activity?id=<%= blog._id %>" target="_blank"><%= blog.title %></a></h4>
+                    <span>
+                        <i class="fa fa-calendar"
+                           aria-hidden="true"></i> <%= moment(blog.date).format("YYYY-MM-DD HH:mm") %>
+                    </span>
+                    <% if (blog.group) { %>
+                    <span style="float: right;">
+                        <i class="fa fa-archive" aria-hidden="true"></i> <%= blog.group.name %>
+                    </span>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+</div>

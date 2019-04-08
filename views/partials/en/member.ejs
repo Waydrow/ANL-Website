@@ -1,0 +1,138 @@
+<div class="row">
+    <div class="col-sm-3 col-md-2 member-sidebar">
+        <ul class="nav nav-list">
+            <li class="nav-header">ANL MEMBERS</li>
+            <li><a href="#supervisor">Faculty Members</a></li>
+            <li><a href="#phd">Postdoctor and PhD. Students</a></li>
+            <li><a href="#master">Graduate Students</a></li>
+            <li><a href="#undergraduate">Undergraduate Students</a></li>
+            <li><a href="#alumni">Alumni/Alumnae</a></li>
+        </ul>
+    </div>
+
+    <div class="col-sm-9 col-md-10">
+        <!-- Faculty Members -->
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 id="supervisor">Faculty Members</h3>
+                <hr>
+                <% teachers.forEach(function (teacher) { %>
+                <div class="cell-teacher">
+                    <div class="avatar avatar-teacher" style="float: left;">
+                        <a target="_blank"
+                           href="<%= teacher.homepage ? teacher.homepage : '/showmember?id=' + teacher._id %>">
+                            <img src="<%= teacher.photo %>">
+                        </a>
+                    </div>
+                    <div class="teacher-introduction">
+                        <h4><%= teacher.name_en %></h4>
+                        <ul>
+                            <li>Research Interests: <%= teacher.interests %></li>
+                        </ul>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <!-- Postdoctor and PhD. Students -->
+        <div class="row" id="phd">
+            <div class="col-sm-12">
+                <h3>Postdoctor and PhD. Students</h3>
+                <hr>
+                <% teachers.forEach(function (teacher) { %>
+                <div class="col-sm-12">
+                    <h3>
+                        <small>Supervisor: <%= teacher.name_en %></small>
+                    </h3>
+                    <hr>
+                    <% students.forEach(function (student) { %>
+                    <% if (!student.graduate && student.role == 2 && student.supervisor && student.supervisor.name_en == teacher.name_en) { %>
+                    <div class="avatar avatar-student">
+                        <a target="_blank"
+                           href="<%= student.homepage ? student.homepage : '/showmember?id=' + student._id %>">
+                            <img src="<%= student.photo %>">
+                        </a>
+                        <h5 class="caption text-center"><%= student.name_en %></h5>
+                    </div>
+                    <% } %>
+                    <% }) %>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <!-- Graduate Students -->
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 id="master">Graduate Students</h3>
+                <hr>
+                <% teachers.forEach(function (teacher) { %>
+                <div class="col-sm-12">
+                    <h3>
+                        <small>Supervisor: <%= teacher.name_en %></small>
+                    </h3>
+                    <hr>
+                    <% students.forEach(function (student) { %>
+                    <% if (!student.graduate && student.role == 1 && student.supervisor && student.supervisor.name_en == teacher.name_en) { %>
+                    <div class="avatar avatar-student">
+                        <a target="_blank"
+                           href="<%= student.homepage ? student.homepage : '/showmember?id=' + student._id %>">
+                            <img src="<%= student.photo %>">
+                        </a>
+                        <h5 class="caption text-center"><%= student.name_en %></h5>
+                    </div>
+                    <% } %>
+                    <% }) %>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <!-- Undergraduate Students -->
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 id="undergraduate">Undergraduate Students</h3>
+                <hr>
+                <% teachers.forEach(function (teacher) { %>
+                <div class="col-sm-12">
+                    <h3>
+                        <small>Supervisor: <%= teacher.name_en %></small>
+                    </h3>
+                    <hr>
+                    <% students.forEach(function (student) { %>
+                    <% if (!student.graduate && student.role == 0 && student.supervisor && student.supervisor.name_en == teacher.name_en) { %>
+                    <div class="avatar avatar-student">
+                        <a target="_blank"
+                           href="<%= student.homepage ? student.homepage : '/showmember?id=' + student._id %>">
+                            <img src="<%= student.photo %>">
+                        </a>
+                        <h5 class="caption text-center"><%= student.name_en %></h5>
+                    </div>
+                    <% } %>
+                    <% }) %>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <!-- Alumni/Alumnae -->
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="sub-header" id="alumni">Alumni/Alumnae</h3>
+                <% students.forEach(function (student) { %>
+                <% if (student.graduate) { %>
+                <div class="avatar avatar-student">
+                    <a target="_blank"
+                       href="<%= student.homepage ? student.homepage : '/showmember?id=' + student._id %>">
+                        <img src="<%= student.photo %>">
+                    </a>
+                    <h5 class="caption text-center"><%= student.name_en %></h5>
+                </div>
+                <% } %>
+                <% }) %>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>

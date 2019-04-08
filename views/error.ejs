@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page not found - ANL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+</head>
+
+<body>
+<div class="container" style="margin-top: 100px;">
+    <div class="row text-center">
+        <% if (status == 401 || status == 500){ %>
+        <img src="/img/<%= status %>.png">
+        <% } else { %>
+        <img src="/img/404.png">
+        <% } %>
+        <h1><%= status %></h1>
+        <% if (status == 401){ %>
+        <h3 style="color: darkgray;">Permission Denied</h3>
+        <p>The page you are looking for is not accessed to guest.</p>
+        <% } else if (status == 500) { %>
+        <h3 style="color: darkgray;">Internal Error occurred</h3>
+        <p>It seemed that some errors occurred to our server.</p>
+        <% } else { %>
+        <h3 style="color: darkgray;">Page not found</h3>
+        <p>The page you are looking for doesn't exist or an other error occurred.</p>
+        <% } %>
+    </div>
+</div>
+</body>
+</html>

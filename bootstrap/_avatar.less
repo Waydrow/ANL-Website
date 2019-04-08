@@ -1,0 +1,48 @@
+//
+// Avatars
+// --------------------------------------------------
+
+// Mixin and adjust the regular image class
+.avatar {
+  float: left;
+  padding: @thumbnail-padding;
+  margin-bottom: @line-height-computed;
+  margin-right: @line-height-computed;
+  line-height: @line-height-base;
+  background-color: @thumbnail-bg;
+  .transition(border .2s ease-in-out);
+
+  // Add a hover state for linked versions only
+  a&:hover,
+  a&:focus,
+  a&.active {
+    border-color: @link-color;
+    text-decoration: none;
+  }
+
+  // Image captions
+  .caption {
+    padding: 5px;
+    color: @thumbnail-caption-color;
+  }
+
+  width: 133px;
+
+  > img,
+  a > img {
+    padding: @thumbnail-padding;
+    width: 125px;
+    height: 160px;
+    margin: auto;
+    border: 1px solid @thumbnail-border;
+    border-radius: @thumbnail-border-radius;
+  }
+}
+
+.avatar-student {
+  height: 200px;
+}
+
+.avatar-teacher {
+  height: 160px;
+}
