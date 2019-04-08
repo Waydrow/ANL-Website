@@ -1,0 +1,152 @@
+<!-- 提示栏 -->
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-8">
+        <div uib-alert ng-class="'alert-' + (achievementCtrl.alert.type || 'warning')" close="achievementCtrl.closeAlert()"
+             ng-if="achievementCtrl.alert" dismiss-on-timeout="3000" class="text-center">
+            <span ng-bind="achievementCtrl.alert.message"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h2 class="sub-header">
+            研究成果
+            <a href="" ng-click="" data-toggle="modal"
+               data-target="#add-achievement"><i class="fa fa-plus" aria-hidden="true"></i></a>
+            <div class="pull-right">
+                <input type="text" ng-model="achievementCtrl.searchPattern" placeholder="搜索研究成果"
+                       style="font-size: small"/>
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </div>
+        </h2>
+    </div>
+</div>
+
+<!-- Add achievement modal window -->
+<div class="modal fade" tabindex="-1" role="dialog" id="add-achievement">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">添加科研成果</h4>
+            </div>
+            <form ng-submit="achievementCtrl.addAchievement()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>中文标题</label>
+                                <input class="form-control" type="text" ng-model="achievementCtrl.newAchievement.title"
+                                       required/>
+                            </div>
+                            <div class="form-group">
+                                <label>中文正文</label>
+                                <div text-angular ng-model="achievementCtrl.newAchievement.content"></div>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-info" ngf-multiple="true"
+                                        ngf-select="achievementCtrl.addImagesNew($files)" accept="image/*">
+                                    添加图片
+                                </button>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>English Title</label>
+                                <input class="form-control" type="text"
+                                       ng-model="achievementCtrl.newAchievement.title_en" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>English Content</label>
+                                <div text-angular ng-model="achievementCtrl.newAchievement.content_en"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="submit"
+                            ng-disabled="achievementCtrl.newAchievement.content.length == 0 || achievementCtrl.newAchievement.content_en.length == 0">
+                        发布成果
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Add achievement modal window -->
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-achievement">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">修改科研成果</h4>
+            </div>
+            <form ng-submit="achievementCtrl.confirmEdit()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>中文标题</label>
+                                <input class="form-control" type="text"
+                                       ng-model="achievementCtrl.achievementEditing.title" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>中文正文</label>
+                                <div text-angular ng-model="achievementCtrl.achievementEditing.content"></div>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-info" ngf-multiple="true"
+                                        ngf-select="achievementCtrl.addImagesEdit($files)" accept="image/*">
+                                    添加图片
+                                </button>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>English Title</label>
+                                <input class="form-control" type="text"
+                                       ng-model="achievementCtrl.achievementEditing.title_en" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>English Content</label>
+                                <div text-angular ng-model="achievementCtrl.achievementEditing.content_en"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="submit"
+                            ng-disabled="achievementCtrl.achievementEditing.content.length == 0 || achievementCtrl.achievementEditing.content_en.length == 0">
+                        确认修改
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="row" ng-repeat="achievement in achievementCtrl.achievements | filter: achievementCtrl.searchPattern">
+    <div class="col-md-12">
+        <a href="" class="dropdown-toggle" data-toggle="dropdown"><h5 ng-bind="achievement.title"></h5></a>
+        <ul class="dropdown-menu dropdown-menu-bottom">
+            <li><a href="" ng-click="achievementCtrl.editAchievement(achievement._id)">编辑成果</a></li>
+            <li><a href="" ng-click="achievementCtrl.deleteAchievement(achievement)">删除成果</a></li>
+        </ul>
+        <div>
+            <small ng-bind="achievement.date | date:'yyyy-MM-dd HH:mm'"></small>
+        </div>
+        <div>
+            <hr>
+        </div>
+    </div>
+</div>

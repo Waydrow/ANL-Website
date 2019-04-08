@@ -1,0 +1,32 @@
+{
+  "name": "anl-website",
+  "authors": [
+    "Shilei Tian <tianshilei1992@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "http://anl.sjtu.edu.cn",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-cookies": "^1.6.4",
+    "angular-resource": "^1.6.4",
+    "angular-ui-bootstrap": "^2.5.0",
+    "angular-animate": "1.6.4",
+    "angular-ui-router": "^0.3.1",
+    "angular-touch": "^1.6.4",
+    "angular-sanitize": "^1.6.4",
+    "angularjs": "^1.6.4",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.1.0",
+    "textAngular": "^1.5.16",
+    "ng-file-upload": "^12.2.13"
+  }
+}

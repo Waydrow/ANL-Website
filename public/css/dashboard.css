@@ -1,0 +1,15 @@
+.sub-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid darkseagreen;
+    font-size:20px;
+}
+
+/* Fix the issue that the width of affix is not 100% */
+.affix {
+    min-width: 100%;
+}
+
+/* Fix the offset caused by the homepage icon */
+.navbar-brand {
+    padding: 15px 15px;
+}

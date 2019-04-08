@@ -1,0 +1,148 @@
+<!-- 提示栏 -->
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-8">
+        <div uib-alert ng-class="'alert-' + (newsCtrl.alert.type || 'warning')" close="newsCtrl.closeAlert()"
+             ng-if="newsCtrl.alert" dismiss-on-timeout="3000" class="text-center">
+            <span ng-bind="newsCtrl.alert.message"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h2 class="sub-header">
+            新闻管理
+            <a href="" data-toggle="modal" data-target="#add-news"><i class="fa fa-plus" aria-hidden="true"></i></a>
+            <div class="pull-right">
+                <input type="text" ng-model="newsCtrl.searchCriteria" placeholder="搜索新闻" style="font-size: small"/>
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </div>
+        </h2>
+    </div>
+</div>
+
+<!-- Add news modal window -->
+<div class="modal fade" tabindex="-1" role="dialog" id="add-news">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">添加新闻</h4>
+            </div>
+            <form ng-submit="newsCtrl.addNews()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>中文标题</label>
+                                <input class="form-control" type="text" ng-model="newsCtrl.newNews.title" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>中文正文</label>
+                                <div text-angular ng-model="newsCtrl.newNews.content"></div>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-info" ngf-multiple="true"
+                                        ngf-select="newsCtrl.addImagesNew($files)" accept="image/*">
+                                    添加图片
+                                </button>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>English Title</label>
+                                <input class="form-control" type="text" ng-model="newsCtrl.newNews.title_en" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>English Content</label>
+                                <div text-angular ng-model="newsCtrl.newNews.content_en"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="submit"
+                            ng-disabled="newsCtrl.newNews.content.length == 0 || newsCtrl.newNews.content_en.length == 0">
+                        发布新闻
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Edit news modal window -->
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-news">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">添加新闻</h4>
+            </div>
+            <form ng-submit="newsCtrl.confirmEdit()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>中文标题</label>
+                                <input class="form-control" type="text" ng-model="newsCtrl.newsEditing.title" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>中文正文</label>
+                                <div text-angular ng-model="newsCtrl.newsEditing.content"></div>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-info" ngf-multiple="true"
+                                        ngf-select="newsCtrl.addImagesEdit($files)" accept="image/*">
+                                    添加图片
+                                </button>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>English Title</label>
+                                <input class="form-control" type="text" ng-model="newsCtrl.newsEditing.title_en"
+                                       required/>
+                            </div>
+                            <div class="form-group">
+                                <label>English Content</label>
+                                <div text-angular ng-model="newsCtrl.newsEditing.content_en"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="submit"
+                            ng-disabled="newsCtrl.newsEditing.content.length == 0 || newsCtrl.newsEditing.content_en.length == 0">
+                        确认修改
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="row" ng-repeat="article in newsCtrl.newsList | filter: newsCtrl.searchCriteria">
+    <div class="col-md-12">
+        <a href="" class="dropdown-toggle" data-toggle="dropdown"><h5 ng-bind="article.title"></h5></a>
+        <ul class="dropdown-menu dropdown-menu-bottom">
+            <li><a href="" ng-click="newsCtrl.editNews(article._id)">编辑文章</a></li>
+            <li><a href="" ng-click="newsCtrl.deleteNews(article)">删除文章</a></li>
+        </ul>
+        <div>
+            <small ng-bind="article.date | date:'yyyy-MM-dd HH:mm'"></small>
+        </div>
+        <div>
+            <hr>
+        </div>
+    </div>
+</div>

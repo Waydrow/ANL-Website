@@ -1,0 +1,438 @@
+<!-- 提示栏 -->
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-8">
+        <div uib-alert ng-class="'alert-' + (memberCtrl.alert.type || 'warning')" close="memberCtrl.closeAlert()"
+             ng-if="memberCtrl.alert" dismiss-on-timeout="3000" class="text-center">
+            <span ng-bind="memberCtrl.alert.message"></span>
+        </div>
+    </div>
+</div>
+
+<!-- 管理用户 -->
+<div class="row">
+    <div class="col-sm-12">
+        <h2 class="sub-header">
+            用户管理 <a href="" ng-click="memberCtrl.toggleAddNewUserModal()"><i class="fa fa-plus"
+                                                                             aria-hidden="true"></i></a>
+            <div class="pull-right">
+                <input type="text" ng-model="memberCtrl.searchCriteria" placeholder="搜索用户"/>
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </div>
+        </h2>
+    </div>
+</div>
+
+<!-- Add user modal window -->
+<div class="modal fade" id="add-user" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addUserLabel">添加新用户</h4>
+            </div>
+            <form ng-submit="memberCtrl.addUser()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="username">用户名</label>
+                                <input class="form-control" id="username" ng-model="memberCtrl.newUser.username"
+                                       required placeholder="User Name">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="password">密码</label>
+                                <input type="password" class="form-control" id="password"
+                                       ng-model="memberCtrl.newUser.password" required
+                                       placeholder="Password">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="confirm-password">确认密码</label>
+                                <input type="password" class="form-control" id="confirm-password"
+                                       ng-model="memberCtrl.newUser.password" required
+                                       placeholder="Confirm Password">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="name">姓名</label>
+                                <input id="name" class="form-control" ng-model="memberCtrl.newUser.name" required
+                                       placeholder="Name">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="name-en">英文姓名</label>
+                                <input id="name-en" class="form-control" ng-model="memberCtrl.newUser.name_en"
+                                       required
+                                       placeholder="English Name">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>导师姓名</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-repeat="supervisor in memberCtrl.supervisors"
+                                           ng-model="memberCtrl.newUser.supervisor._id"
+                                           uib-btn-radio="supervisor._id">{{supervisor.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>用户权限</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newUser.admin"
+                                           uib-btn-radio="false">普通用户</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newUser.admin"
+                                           uib-btn-radio="true">管理员</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>用户身份</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newUser.role"
+                                           uib-btn-radio="0">本科生</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newUser.role"
+                                           uib-btn-radio="1">硕士</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newUser.role"
+                                           uib-btn-radio="2">博士</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newUser.role"
+                                           uib-btn-radio="3">教师</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>分组</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-repeat="group in memberCtrl.groups"
+                                           uib-btn-checkbox ng-bind="group.name"
+                                           ng-model="memberCtrl.groupsSelection[group._id]"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>已毕业</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newUser.graduate"
+                                           uib-btn-radio="true">是</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newUser.graduate"
+                                           uib-btn-radio="false">否</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Edit user modal window -->
+<div class="modal fade" id="edit-user" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">更改用户</h4>
+            </div>
+            <form ng-submit="memberCtrl.confirmEditUser()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="edit-name">姓名</label>
+                                <input id="edit-name" class="form-control" ng-model="memberCtrl.userEditing.name"
+                                       required
+                                       placeholder="Name">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="edit-name-en">英文姓名</label>
+                                <input id="edit-name-en" class="form-control"
+                                       ng-model="memberCtrl.userEditing.name_en"
+                                       required
+                                       placeholder="English Name">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>导师姓名</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-repeat="supervisor in memberCtrl.supervisors"
+                                           ng-model="memberCtrl.userEditing.supervisor._id"
+                                           uib-btn-radio="supervisor._id">{{supervisor.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>用户权限</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.userEditing.admin"
+                                           uib-btn-radio="false">普通用户</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.userEditing.admin"
+                                           uib-btn-radio="true">管理员</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>用户身份</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.userEditing.role"
+                                           uib-btn-radio="0">本科生</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.userEditing.role"
+                                           uib-btn-radio="1">硕士</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.userEditing.role"
+                                           uib-btn-radio="2">博士</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.userEditing.role"
+                                           uib-btn-radio="3">教师</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>分组</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-repeat="group in memberCtrl.groups"
+                                           uib-btn-checkbox ng-bind="group.name"
+                                           ng-model="memberCtrl.groupsSelection[group._id]"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>已毕业</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.userEditing.graduate"
+                                           uib-btn-radio="true">是</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.userEditing.graduate"
+                                           uib-btn-radio="false">否</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button class="btn btn-primary">确认修改</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Students List -->
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-hover table-bordered">
+            <caption>学生列表</caption>
+            <thead>
+            <tr>
+                <th>用户名</th>
+                <th>姓名</th>
+                <th>导师姓名</th>
+                <th>分组</th>
+                <th>身份</th>
+                <th>权限</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="user in memberCtrl.users | filter: memberCtrl.searchCriteria">
+                <td ng-bind="user.username"></td>
+                <td><span ng-bind="user.name"></span></td>
+                <td><span ng-bind="user.supervisor.name"></span></td>
+                <td><span ng-repeat="group in user.groups" ng-bind="group.name + ' '"></span></td>
+                <td><span ng-bind="memberCtrl.ROLE[user.role]"></span></td>
+                <td><span ng-bind="user.admin ? 'admin' : 'user'"></span></td>
+                <td>
+                    <a href="" ng-click="memberCtrl.resetPassword(user)">
+                        <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
+                    </a>
+                    <a href="" ng-click="memberCtrl.editUser(user)">
+                        <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                    </a>
+                    <a href="" ng-click="memberCtrl.deleteUser(user)" ng-hide="currentUser.username == user.username">
+                        <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 管理分组 -->
+<div class="row">
+    <div class="col-sm-12">
+        <h2 class="sub-header">
+            分组管理
+            <a href="" data-toggle="modal" data-target="#add-group"><i class="fa fa-plus"
+                                                                       aria-hidden="true"></i></a>
+        </h2>
+    </div>
+</div>
+
+<!--添加分组窗口-->
+<div class="modal fade" id="add-group" tabindex="-1" role="dialog" aria-labelledby="addGroupLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addGroupLabel">添加新分组</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form ng-submit="memberCtrl.addGroup()">
+                            <div class="form-group">
+                                <label>分组名称</label>
+                                <input type="text" class="form-control" ng-model="memberCtrl.newGroup.name"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label>类别</label><br>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newGroup.category"
+                                           uib-btn-radio="0"
+                                           required>学生</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newGroup.category"
+                                           uib-btn-radio="1">教师</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>隶属于</label><br>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.newGroup.parent"
+                                           ng-repeat="group in memberCtrl.groups" ng-bind="group.name"
+                                           uib-btn-radio="group"></label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="submit" class="btn btn-primary">添加</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--修改分组窗口-->
+<div class="modal fade" id="edit-group" tabindex="-1" role="dialog" aria-labelledby="addGroupLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加新分组</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form ng-submit="memberCtrl.finishEditingGroup()">
+                            <div class="form-group">
+                                <label>分组名称</label>
+                                <input type="text" class="form-control" ng-model="memberCtrl.groupEditing.name"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label>类别</label><br>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.groupEditing.category"
+                                           uib-btn-radio="0"
+                                           required>学生</label>
+                                    <label class="btn btn-primary" ng-model="memberCtrl.groupEditing.category"
+                                           uib-btn-radio="1">教师</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>隶属于</label><br>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="memberCtrl.groupEditing.parent"
+                                           ng-repeat="group in memberCtrl.groups" ng-bind="group.name"
+                                           uib-btn-radio="group"></label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="submit" class="btn btn-primary">确认修改</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Groups List -->
+<div class="row">
+    <div class="col-sm-8">
+        <table class="table table-bordered table-hover table-condensed">
+            <caption>分组列表</caption>
+            <thead>
+            <tr>
+                <th>组名称</th>
+                <th>组类型</th>
+                <th>隶属于</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="group in memberCtrl.groups">
+                <td>
+                    <span ng-bind="group.name"></span>
+                </td>
+                <td>
+                    <span ng-bind="group.category == 0 ? '学生' : '教师'"></span>
+                </td>
+                <td>
+                    <span ng-bind="group.parent ? group.parent.name : 'ANL'"></span>
+                </td>
+                <td>
+                    <a href="" ng-click="memberCtrl.editGroup(group)" ng-hide="memberCtrl.editingGroup == group"><i
+                            class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a>
+                    &emsp;
+                    <a href="" ng-click="memberCtrl.deleteGroup(group)"><i class="fa fa-times fa-lg"
+                                                                           aria-hidden="true"></i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

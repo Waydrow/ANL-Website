@@ -337,7 +337,7 @@ router.delete('/user', authAdmin, function(req, res, next) {
         } else {
             res.sendStatus(200);
             if (user.photo !== "/img/no_avatar.png") {
-                fs.unlink('public' + path, function(err) {
+                fs.unlink(path.join(ROOT_PATH, 'public', user.photo), function(err) {
                     if (err) {
                         conole.error("Failed to unlink the user avatar.");
                         console.error(err);
@@ -734,7 +734,7 @@ router.post('/image', uploadImage.array("images"), function(req, res, next) {
 router.post('/carousel_image', authAdmin, uploadImage.array("images"), function(req, res, next) {
     "use strict";
     async.each(req.files, function(file, cb) {
-        var indexFile = file.path.indexOf('images/');
+        var indexFile = file.path.indexOf('/images/');
         var tmpPath = file.path.slice(indexFile);
         var image = new Image({
 
@@ -782,7 +782,7 @@ router.delete('/carousel_image', authAdmin, function(req, res, next) {
         if (err) {
             console.error("Error occurred when finding the carousel image.");
             return unknownError(res, err);
-        } else if (!img) {
+        } else if (!image) {
             console.error("Cannot find the carousel image.");
             return res.sendStatus(404);
         } else {
@@ -793,6 +793,7 @@ router.delete('/carousel_image', authAdmin, function(req, res, next) {
                     console.error("Failed to unlink the corresponding file.");
                 }
             });*/
+            // console.log('delete file path: ' + tmpPath)
             fs.unlink(tmpPath, function(err) {
                 if (err) {
                     console.error("Failed to unlink the corresponding file.");
@@ -814,11 +815,13 @@ router.post('/doc', authAdmin, uploadDocs.array("files"), function(req, res, nex
     }
     var newDocs = [];
     for (var i = 0; i < req.files.length; ++i) {
+        var indexFile = req.files[i].path.indexOf('files/');
+        var tmpPath = req.files[i].path.slice(indexFile);
         var doc = new Document({
             name: req.files[i].originalname,
             size: req.files[i].size,
             introduction: req.body.information[i],
-            path: req.files[i].path,
+            path: tmpPath,
             date: Date.now(),
             uploader: req.payload.id
         });
@@ -869,7 +872,13 @@ router.delete('/doc', function(req, res, next) {
             return res.sendStatus(404);
         } else {
             res.sendStatus(200);
-            fs.unlink(doc.path, function(err) {
+            /*fs.unlink(doc.path, function(err) {
+                if (err) {
+                    console.error("Error when unlink the file.");
+                    console.error(err);
+                }
+            });*/
+            fs.unlink(path.join(ROOT_PATH, doc.path), function(err) {
                 if (err) {
                     console.error("Error when unlink the file.");
                     console.error(err);
@@ -919,7 +928,12 @@ router.delete("/file", function(req, res, next) {
                         return unknownError(res, err);
                     } else {
                         res.sendStatus(200);
-                        fs.unlink(file.path, function(err) {
+                        // fs.unlink(file.path, function(err) {
+                        //     if (err) {
+                        //         console.error("Failed to unlink the file.");
+                        //     }
+                        // });
+                        fs.unlink(path.join(ROOT_PATH, file.path), function(err) {
                             if (err) {
                                 console.error("Failed to unlink the file.");
                             }

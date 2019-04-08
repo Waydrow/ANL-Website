@@ -1,0 +1,450 @@
+<!-- 提示栏 -->
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-8">
+        <div uib-alert ng-class="'alert-' + (profileCtrl.alert.type || 'warning')" close="profileCtrl.closeAlert()"
+             ng-if="profileCtrl.alert" dismiss-on-timeout="3000" class="text-center">
+            <span ng-bind="profileCtrl.alert.message"></span>
+        </div>
+    </div>
+</div>
+
+<!--个人信息-->
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="sub-header">个人信息</h3>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">中文名字</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="profileCtrl.user.name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">英文名字</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="profileCtrl.user.name_en">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">电子邮箱</label>
+                <div class="col-sm-8">
+                    <input type="email" class="form-control" ng-model="profileCtrl.user.email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">研究方向</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="profileCtrl.user.interests">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">个人主页</label>
+                <div class="col-sm-8">
+                    <input type="url" class="form-control" ng-model="profileCtrl.user.homepage">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">自我介绍</label>
+                <div class="col-sm-8">
+                    <textarea class="form-control" rows="3" ng-model="profileCtrl.user.introduction"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="text-center">
+                    <button class="btn btn-default" type="submit" ng-click="profileCtrl.saveChanges()">保存修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--发表论文-->
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="sub-header">发表论文 <a href="" ng-click="profileCtrl.showPaperModal()"><i class="fa fa-plus"
+                                                                                          aria-hidden="true"></i></a>
+        </h3>
+        <table class="table">
+            <tr>
+                <th>作者</th>
+                <th>标题</th>
+                <th>期刊/会议名称</th>
+                <th>发表日期</th>
+                <th>操作</th>
+            </tr>
+            <tr ng-repeat="paper in profileCtrl.user.publications">
+                <td ng-bind="paper.authors"></td>
+                <td ng-bind="paper.title"></td>
+                <td ng-bind="paper.name"></td>
+                <td ng-bind="paper.date | date: 'yyyy-MM-dd'"></td>
+                <td><a href="" ng-click="profileCtrl.removePaper($index)"><i class="fa fa-times"
+                                                                             aria-hidden="true"></i></a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!--添加论文窗口-->
+<div class="modal fade" id="add-paper" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addPaperLabel">添加新论文</h4>
+            </div>
+            <form ng-submit="profileCtrl.addPaper()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>作者</label>
+                                <input type="text" class="form-control" ng-model="profileCtrl.newPaper.authors"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>标题</label>
+                                <input type="text" class="form-control" ng-model="profileCtrl.newPaper.title"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label>发表日期</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd"
+                                           datepicker-options="profileCtrl.dateOptions"
+                                           ng-model="profileCtrl.newPaper.date"
+                                           is-open="profileCtrl.popupPublicationDatePicker"
+                                           close-text="Close" alt-input-formats="yyyy-MM-dd" required/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                                ng-click="profileCtrl.openPublicationDatePicker()">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </button>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>期刊/会议名称</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-success" ng-model="profileCtrl.newPaper.type"
+                                           uib-btn-radio="0">会议</label>
+                                    <label class="btn btn-success" ng-model="profileCtrl.newPaper.type"
+                                           uib-btn-radio="1">期刊</label>
+                                </div>
+                                <input type="text" class="form-control" ng-model="profileCtrl.newPaper.name"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>页码</label>
+                                <input type="text" class="form-control" ng-model="profileCtrl.newPaper.page">
+                            </div>
+                        </div>
+
+                        <div ng-if="profileCtrl.newPaper.type == 1">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>卷</label>
+                                    <input type="text" class="form-control" ng-model="profileCtrl.newPaper.vol">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>期</label>
+                                    <input type="text" class="form-control" ng-model="profileCtrl.newPaper.issue">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--获奖情况-->
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="sub-header">
+            获奖情况 <a href="" ng-click="profileCtrl.showAwardModal()">
+            <i class="fa fa-plus" aria-hidden="true"></i></a>
+        </h3>
+        <table class="table">
+            <tr>
+                <th>时间</th>
+                <th>奖项名称</th>
+                <th>操作</th>
+            </tr>
+            <tr ng-repeat="award in profileCtrl.user.awards">
+                <td ng-bind="award.date | date: 'yyyy-MM-dd'"></td>
+                <td ng-bind="award.name"></td>
+                <td>
+                    <a href="" ng-click="profileCtrl.removeAward($index)">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!--添加获奖窗口-->
+<div class="modal fade" id="add-award" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加新奖项</h4>
+            </div>
+            <form ng-submit="profileCtrl.addAward()">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>时间</label>
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd"
+                                   datepicker-options="profileCtrl.dateOptions"
+                                   ng-model="profileCtrl.newAward.date"
+                                   is-open="profileCtrl.popupAwardDatePicker"
+                                   close-text="Close" alt-input-formats="yyyy-MM-dd" required/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"
+                                        ng-click="profileCtrl.openAwardDatePicker()">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <label>奖项名称</label>
+                        <input type="text" class="form-control" ng-model="profileCtrl.newAward.name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--教育经历-->
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="sub-header">教育经历 <a href="" ng-click="profileCtrl.showEducationModal()"><i
+                class="fa fa-plus"
+                aria-hidden="true"></i></a>
+        </h3>
+        <table class="table">
+            <tr>
+                <th>时间</th>
+                <th>学校</th>
+                <th>专业</th>
+                <th>学历</th>
+                <th>操作</th>
+            </tr>
+            <tr ng-repeat="education in profileCtrl.user.educations">
+                <td>
+                    <span ng-bind="education.start | date: 'yyyy-MM'"></span> 至
+                    <span ng-bind="education.end | date: 'yyyy-MM'"></span>
+                </td>
+                <td ng-bind="education.school"></td>
+                <td ng-bind="education.major"></td>
+                <td ng-if="education.type == 0">本科</td>
+                <td ng-if="education.type == 1">硕士</td>
+                <td ng-if="education.type == 2">博士</td>
+                <td>
+                    <a href="" ng-click="profileCtrl.removeEducation($index)">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!--添加教育经历窗口-->
+<div class="modal fade" id="add-education" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addEducationLabel">添加教育经历</h4>
+            </div>
+            <form ng-submit="profileCtrl.addEducation()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>开始时间</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd"
+                                           datepicker-options="profileCtrl.dateOptions"
+                                           ng-model="profileCtrl.newEducation.start"
+                                           is-open="profileCtrl.popupEducationStartDatePicker"
+                                           close-text="Close" alt-input-formats="yyyy-MM-dd" required/>
+                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"
+                                        ng-click="profileCtrl.openEducationStartDatePicker()">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>结束时间</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd"
+                                           datepicker-options="profileCtrl.dateOptions"
+                                           ng-model="profileCtrl.newEducation.end"
+                                           is-open="profileCtrl.popupEducationEndDatePicker"
+                                           close-text="Close" alt-input-formats="yyyy-MM-dd"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                                ng-click="profileCtrl.openEducationEndDatePicker()">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </button>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>学校</label>
+                                <input type="text" class="form-control" ng-model="profileCtrl.newEducation.school">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>专业</label>
+                                <input type="text" class="form-control" ng-model="profileCtrl.newEducation.major">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>学位</label>
+                                <label class="btn btn-success" ng-model="profileCtrl.newEducation.type"
+                                       uib-btn-radio="0">本科</label>
+                                <label class="btn btn-success" ng-model="profileCtrl.newEducation.type"
+                                       uib-btn-radio="1">硕士</label>
+                                <label class="btn btn-success" ng-model="profileCtrl.newEducation.type"
+                                       uib-btn-radio="2">博士</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--头像-->
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="sub-header">头像设置</h3>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">当前头像</label>
+                <div class="col-sm-4">
+                    <img ng-src="{{profileCtrl.user.photo}}" alt="当前头像" width="160px">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#changeAvatar">更改头像
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--更改头像窗口-->
+<div class="modal fade" id="changeAvatar" tabindex="-1" role="dialog" aria-labelledby="changeAvatarLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="changeAvatarLabel">更改头像</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label class="col-sm-4">选择一个图片文件</label>
+                        <button class="btn btn-default" type="file"
+                                ngf-select="profileCtrl.setNewAvatar($file, $invalidFiles)"
+                                accept="image/*" ngf-max-size="1MB">选择图片
+                        </button>
+                        <span ng-if="profileCtrl.newAvatar" ng-bind="profileCtrl.newAvatar.name"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4">
+                            <button class="btn btn-default" ng-disabled="!profileCtrl.newAvatar"
+                                    ng-click="profileCtrl.uploadAvatar()">开始上传
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--密码修改-->
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="sub-header">更改密码</h3>
+        <div class="col-sm-offset-1 col-sm-10">
+            <form class="form-horizontal" ng-submit="profileCtrl.modifyPassword()">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">当前密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" ng-model="profileCtrl.password.old">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">新密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" ng-model="profileCtrl.password.new">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">再次输入新密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" ng-model="profileCtrl.password.confirm">
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                        <button type="submit" class="btn btn-default">更改密码</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

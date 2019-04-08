@@ -1,0 +1,186 @@
+<!-- 提示栏 -->
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-8">
+        <div uib-alert ng-class="'alert-' + (activityCtrl.alert.type || 'warning')" close="activityCtrl.closeAlert()"
+             ng-if="activityCtrl.alert" dismiss-on-timeout="3000" class="text-center">
+            <span ng-bind="activityCtrl.alert.message"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h2 class="sub-header">
+            科研活动管理
+            <a href="" ng-click="activityCtrl.showAddActivityWindow()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+            <div class="pull-right">
+                <input type="text" ng-model="activityCtrl.searchPattern" placeholder="搜索科研活动"
+                       style="font-size: small"/>
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </div>
+        </h2>
+    </div>
+</div>
+
+<!--添加科研活动窗口-->
+<div class="modal fade" id="add-activity" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加科研活动</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form ng-submit="activityCtrl.addActivity()">
+                            <div class="form-group">
+                                <label>标题</label>
+                                <input ng-model="activityCtrl.newBlog.title" class="form-control" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>分组</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="activityCtrl.newBlog.group"
+                                           ng-repeat="group in activityCtrl.groups" ng-bind="group.name"
+                                           uib-btn-radio="group" uncheckable></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>正文</label>
+                                <div text-angular ng-model="activityCtrl.newBlog.content"></div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" ngf-multiple="true"
+                                        ngf-select="activityCtrl.addAttachments($files)">添加附件
+                                </button>
+                            </div>
+                            <div class="form-group" ng-if="activityCtrl.newBlog.attachments.length">
+                                <table class="table table-bordered table-hover table-condensed">
+                                    <caption>附件列表</caption>
+                                    <tbody>
+                                    <tr ng-repeat="file in activityCtrl.newBlog.attachments">
+                                        <td class="dropup">
+                                            <a href="" ng-bind="file.name" class="dropdown-toggle"
+                                               data-toggle="dropdown"
+                                               aria-haspopup="true" aria-expanded="false"></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href=""
+                                                       ng-click="activityCtrl.deleteAttachment($index)">删除附件</a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-success" 
+                                        ng-disabled="activityCtrl.newBlog.title.length == 0 || activityCtrl.newBlog.content.length == 0">
+                                    上传活动
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--修改科研活动窗口-->
+<div class="modal fade" id="edit-activity" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加科研活动</h4>
+            </div>
+            <form ng-submit="activityCtrl.confirmEdit()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>标题</label>
+                                <input ng-model="activityCtrl.blogEditing.title" class="form-control" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>分组</label>
+                                <div class="btn-group">
+                                    <label class="btn btn-primary" ng-model="activityCtrl.blogEditing.group"
+                                           ng-repeat="group in activityCtrl.groups" ng-bind="group.name"
+                                           uib-btn-radio="group"></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>正文</label>
+                                <div text-angular ng-model="activityCtrl.blogEditing.content"></div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" ngf-multiple="true"
+                                        ngf-select="activityCtrl.addAttachmentsEditing($files)">添加附件
+                                </button>
+                            </div>
+                            <div class="form-group" ng-if="activityCtrl.blogEditing.attachments.length">
+                                <table class="table table-bordered table-hover table-condensed">
+                                    <caption>附件列表</caption>
+                                    <tbody>
+                                    <tr ng-repeat="file in activityCtrl.blogEditing.attachments">
+                                        <td class="dropup">
+                                            <a href="" ng-bind="file.name" class="dropdown-toggle"
+                                               data-toggle="dropdown"
+                                               aria-haspopup="true" aria-expanded="false"></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href=""
+                                                       ng-click="activityCtrl.deleteAttachmentEditing($index)">删除附件
+                                                </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="submit"
+                            ng-disabled="activityCtrl.blogEditing.content.length == 0">
+                        确认修改
+                    </button>
+                </div>
+            </form>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped table-bordered table-hover">
+            <tr>
+                <th class="text-center">文章名称</th>
+                <th class="text-center">时间</th>
+                <th ng-if="activityCtrl.currentUser.admin" class="text-center">作者</th>
+                <th class="text-center">操作</th>
+            </tr>
+            <tr ng-repeat="activity in activityCtrl.activities | filter: activityCtrl.searchPattern">
+                <td ng-bind="activity.title"></td>
+                <td ng-bind="activity.date | date:'yyyy-MM-dd HH:mm'"></td>
+                <td ng-if="activityCtrl.currentUser.admin" ng-bind="activity.author.name"></td>
+                <td>
+                    <a href="" ng-click="activityCtrl.editActivity(activity)">
+                        <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                    </a>
+                    <a href="" ng-click="activityCtrl.deleteActivity(activity)">
+                        <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
