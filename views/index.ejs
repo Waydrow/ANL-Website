@@ -7,6 +7,7 @@
     <script type="text/javascript" src="/js/plugins.js"></script>
     <script type="text/javascript" src="/js/jwt-decode.min.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
@@ -20,10 +21,10 @@
         <div class="utility-nav">
             <a href="" ng-click="headerCtrl.showLoginModal()" title="登录" ng-if="!headerCtrl.currentUser"><i
                         class="fa fa-user-circle-o fa-lg" aria-hidden="true"></i><span> 登录</span></a>
-            <a href="" data-toggle="dropdown" ng-if="headerCtrl.currentUser">
+            <a href="" data-toggle="dropdown" ng-if="headerCtrl.currentUser" id="username-btn">
                 <i class="fa fa-user-o" aria-hidden="true"></i> <span ng-bind="headerCtrl.currentUser.username"></span>
             </a>
-            <ul class="dropdown-menu pull-right" role="menu">
+            <ul class="dropdown-menu pull-right" role="menu" id="username-drop">
                 <li><a href="/dashboard" target="_blank">后台管理</a></li>
                 <li><a href="" ng-click="headerCtrl.logout()">注销</a></li>
             </ul>
@@ -108,6 +109,18 @@
                                     class="icon fa fa-heart"></span> 成果展示</a></li>
                     <li ng-class="{active: <%= name == 'activity'; %>}"><a href="activity"><span
                                     class="icon fa fa-flag"></span> 科研活动</a></li>
+		    <li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="conf-dropdown-btn" role="button">
+				<i class="fa fa-suitcase" aria-hidden="true"></i>
+				承办会议
+				<b class="caret"></b>
+			</a>
+			<ul class="dropdown-menu" id="conf-dropdown">
+				<li><a href="http://anl.sjtu.edu.cn/SKA2018" target="_blank">SKA 2018</a></li>
+				<li><a href="http://anl.sjtu.edu.cn/ISCO2018" target="_blank">ISCO 2018</a></li>
+				<li><a href="http://anl.sjtu.edu.cn/coca2017" target="_blank">Cocoa 2017</a></li>
+			</ul>
+		    </li>
                     <li ng-class="{active: <%= name == 'download'; %>}"><a href="download"><span
                                     class="icon fa fa-download"></span> 资料下载</a></li>
                     <li><a href="en"><span class="icon fa fa-language"></span> English</a></li>
@@ -139,5 +152,17 @@
 </footer>
 
 <script type="text/javascript" src="/js/index-controllers.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function(){
+$("#conf-dropdown-btn").click(function(){
+  $("#conf-dropdown").toggle();
+});
+
+$("#username-btn").click(function(){
+    $("#username-drop").toggle();
+});
+});
+</script>
 </body>
 </html>
